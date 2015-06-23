@@ -1,0 +1,11 @@
+{
+"departure":"paris",
+"arrival":"lyon",
+"departure_date":"2015-08-21",
+"departure_min_time":"18:00",
+"departure_max_time":"22:00",
+
+"return_date":"2015-08-23",
+"return_min_time":"18:00",
+"return_max_time":"22:00"
+}

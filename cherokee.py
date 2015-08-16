@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import time
+import datetime
 import json
 
 driver = webdriver.Firefox()
@@ -26,12 +26,20 @@ class train:
                                                                          self.arrival_time,\
                                                                          self.duration_sec,\
                                                                          self.price))
+def load_configuration(filename) :
+    filename = 'configuration/%s.json' % filename
+    with open(filename) as data_file:    
+        return json.load(data_file)
+
+        
 def generate_based_url(base_url, departure, arrival,
                        departure_date, departure_min_time,
                        return_date, return_min_time):
     url = base_url+departure+'/'+arrival+'/'+departure_date\
     +'-'+departure_min_time+'/'+return_date+'-'+return_min_time
     return url
+
+
 
 def authentification(signin_page, login, password) :
     # visit login page
@@ -57,9 +65,9 @@ def search_trip(trip_url) :
     train_list = []
     try: #what if no price for a train ?
         for i in range(len(schedule)):
-                dep_time, arr_time = schedule[i].text.split('➔')
-                second_price = secondclass_price[i].text
-                train_list.append(train(dep_time.strip(), arr_time.strip(), second_price))
+            dep_time, arr_time = schedule[i].text.split('➔')
+            second_price = secondclass_price[i].text
+            train_list.append(train(dep_time.strip(), arr_time.strip(), second_price))
     except:
         pass
         
@@ -67,11 +75,12 @@ def search_trip(trip_url) :
         
 def choose_train(train_list):
     #still to do
-    random = 2
+    random = 0
     return train_list[random]
 
 def add_to_cart(train):
-    driver.find_element_by_xpath("//span[contains(.,'"+train.button_id+"')]").click()
+    departure = train.departure_time
+    driver.find_element_by_xpath("//span[contains(.,'"+departure+"')]").click()
     driver.find_element_by_xpath("//button[contains(.,'Choisir')]").click()
     driver.find_element_by_xpath("//button[contains(.,'Ajouter au panier')]").click()
 
@@ -121,6 +130,3 @@ def main():
     
 if __name__=='__main__':
     main()
-
-
-    
